@@ -24,8 +24,4 @@ class HTMLBuilder
       }
     end
   end
-
-  def print
-    @builder.to_html
-  end
 end
