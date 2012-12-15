@@ -3,12 +3,6 @@ class HTMLBuilder
     @builder = builder
   end
 
-  def renderQuestionnaire(&block)
-    @builder.form do |without_scope_stealing|
-      yield if block_given?
-    end
-  end
-
   def renderShortAnswerQuestion(id, prompt)
     @builder.fieldset do |html|
       html.label(:for => id) { html.text prompt }

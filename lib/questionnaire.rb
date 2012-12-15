@@ -16,11 +16,9 @@ class Questionnaire
   end
 
   def render(builder)
-    builder.renderQuestionnaire do
-      @questions.each_with_index do |question, index|
-        question_id = "question#{index}"
-        question.render(question_id, builder)
-      end
+    @questions.each_with_index do |question, index|
+      question_id = "question#{index}"
+      question.render(question_id, builder)
     end
   end
 end
