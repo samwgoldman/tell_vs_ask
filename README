@@ -1,0 +1,3 @@
+"Tell, Don't Ask" is an OOP design principle, which can help to manage complexity in large applications.
+
+This repo shows a step-by-step refactoring that tries to follow the principle. Some strawmen were injured in the making of this repo.
