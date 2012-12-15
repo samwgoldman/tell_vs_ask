@@ -1,36 +1,26 @@
 require "questionnaire"
-require "html_builder"
-require "capybara"
-require "nokogiri"
 
 describe Questionnaire do
-  let(:short_answer) { ShortAnswerQuestion.new("What is your name?") }
-  let(:multiple_choice) { MultipleChoiceQuestion.new("What is your favorite color?", %w{red blue}) }
-  let(:builder) { HTMLBuilder.new(Nokogiri::HTML::Builder.new) }
+  it "renders the questionnaire" do
+    questionnaire = Questionnaire.new([])
+    builder = mock
 
-  it "displays every question" do
-    questionnaire = Questionnaire.new([short_answer, multiple_choice])
+    builder.should_receive(:renderQuestionnaire)
+
     questionnaire.render(builder)
-    view = Capybara.string(builder.print)
-
-    labels = view.all("form > fieldset > label").map(&:text)
-    labels.should eq(["What is your name?", "What is your favorite color?"])
   end
 
-  it "displays a short answer question as a text input" do
-    questionnaire = Questionnaire.new([short_answer])
+  it "renders every question" do
+    question0 = mock
+    question1 = mock
+    questionnaire = Questionnaire.new([question0, question1])
+
+    builder = stub
+    builder.stub(:renderQuestionnaire) { |&block| block.call }
+
+    question0.should_receive(:render).with("question0", builder).ordered
+    question1.should_receive(:render).with("question1", builder).ordered
+
     questionnaire.render(builder)
-    view = Capybara.string(builder.print)
-
-    view.should have_field("What is your name?")
-  end
-
-  it "displays a multiple choice questions as radio buttons" do
-    questionnaire = Questionnaire.new([multiple_choice])
-    questionnaire.render(builder)
-    view = Capybara.string(builder.print)
-
-    view.should have_field("red")
-    view.should have_field("blue")
   end
 end
