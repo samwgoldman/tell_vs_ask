@@ -1,26 +1,12 @@
 ShortAnswerQuestion = Struct.new(:prompt) do
   def render(id, builder)
-    builder.fieldset do |html|
-      html.label(:for => id) { html.text prompt }
-      html.input(:type => "text", :id => id, :name => id)
-    end
+    builder.renderShortAnswerQuestion(id, prompt)
   end
 end
 
 MultipleChoiceQuestion = Struct.new(:prompt, :choices) do
   def render(id, builder)
-    builder.fieldset do |html|
-      html.label { html.text prompt }
-      html.ul {
-        choices.each do |choice|
-          choice_id = "#{id}_#{choice}"
-          html.li {
-            html.label(:for => choice_id) { html.text choice }
-            html.input(:type => "radio", :id => choice_id, :name => choice_id)
-          }
-        end
-      }
-    end
+    builder.renderMultipleChoiceQuestion(id, prompt, choices)
   end
 end
 
@@ -30,10 +16,10 @@ class Questionnaire
   end
 
   def render(builder)
-    builder.form do |html|
+    builder.renderQuestionnaire do
       @questions.each_with_index do |question, index|
         question_id = "question#{index}"
-        question.render(question_id, html)
+        question.render(question_id, builder)
       end
     end
   end
